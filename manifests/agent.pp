@@ -15,8 +15,8 @@
 #   ['group_id']              - The groupid of the puppet group
 #   ['splay']                 - If splay should be enable defaults to false
 #   ['splaylimit']            - The maximum time to delay before runs.
-#   ['classfile']             - The file in which puppet agent stores a list of the classes 
-#                               associated with the retrieved configuration. 
+#   ['classfile']             - The file in which puppet agent stores a list of the classes
+#                               associated with the retrieved configuration.
 #   ['logdir']                - The directory in which to store log files
 #   ['environment']           - The environment of the puppet agent
 #   ['report']                - Whether to return reports
@@ -81,7 +81,7 @@ class puppet::agent(
   $puppet_run_interval    = $::puppet::params::puppet_run_interval,
   $splay                  = false,
 
-  # $splaylimit defaults to $runinterval per Puppetlabs docs:  
+  # $splaylimit defaults to $runinterval per Puppetlabs docs:
   # http://docs.puppetlabs.com/references/latest/configuration.html#splaylimit
   $splaylimit             = $::puppet::params::puppet_run_interval,
   $classfile              = $::puppet::params::classfile,
@@ -174,10 +174,14 @@ class puppet::agent(
       }
 
       cron { 'puppet-client':
-        command => $puppet_run_command,
-        user    => 'root',
-        hour    => $cron_hour,
-        minute  => $minute,
+        command     => $puppet_run_command,
+        user        => 'root',
+        hour        => $cron_hour,
+        minute      => $minute,
+        environment => [
+          "http_proxy=http://${http_proxy_host}:${http_proxy_port}",
+          "https_proxy=http://${http_proxy_host}:${http_proxy_port}"
+        ]
       }
     }
     # Run Puppet through external tooling, like MCollective
