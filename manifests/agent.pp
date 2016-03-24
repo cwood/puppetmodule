@@ -178,10 +178,6 @@ class puppet::agent(
         user        => 'root',
         hour        => $cron_hour,
         minute      => $minute,
-        environment => [
-          "http_proxy=http://${http_proxy_host}:${http_proxy_port}",
-          "https_proxy=http://${http_proxy_host}:${http_proxy_port}"
-        ]
       }
     }
     # Run Puppet through external tooling, like MCollective
@@ -277,7 +273,7 @@ class puppet::agent(
       value   => $puppet_ssldir,
     }
   }
-  
+
   # rundir has no default and must be provided.
   ini_setting {'puppetagentrundir':
     ensure  => present,
